@@ -20,6 +20,8 @@ abstract class Signer {
 class Signature {
   SignerInfo? signerInfo;
   Uint8List? signature;
+  String? memo;        // New Add
+  Uint8List? data;     // New Add
 }
 
 class SignerInfo {

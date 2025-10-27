@@ -14,6 +14,8 @@ class KeyPageOperationType {
   static const Add = 3;
   static const SetThreshold = 4;
   static const UpdateAllowed = 5;
+  static const SetRejectThreshold = 6;
+  static const SetResponseThreshold = 7;
 }
 
 class KeySpec {
@@ -72,6 +74,10 @@ class UpdateKeyPage extends BasePayload {
         return marshalBinarySetThresholdKeyPageOperation(operation);
       case KeyPageOperationType.UpdateAllowed:
         return marshalBinaryUpdateAllowedKeyPageOperation(operation);
+      case KeyPageOperationType.SetRejectThreshold:
+        return marshalBinarySetRejectThresholdKeyPageOperation(operation);
+      case KeyPageOperationType.SetResponseThreshold:
+        return marshalBinarySetResponseThresholdKeyPageOperation(operation);
       default:
         return marshalBinaryAddRemoveKeyOperation(operation);
     }
@@ -146,6 +152,24 @@ class UpdateKeyPage extends BasePayload {
       operation.deny!
           .forEach((d) => forConcat.addAll(uvarintMarshalBinary(d, 3)));
     }
+
+    return forConcat.asUint8List();
+  }
+
+  Uint8List marshalBinarySetRejectThresholdKeyPageOperation(KeyOperation operation) {
+    List<int> forConcat = [];
+
+    forConcat.addAll(uvarintMarshalBinary(operation.type!, 1));
+    forConcat.addAll(uvarintMarshalBinary(operation.threshold!, 2));
+
+    return forConcat.asUint8List();
+  }
+
+  Uint8List marshalBinarySetResponseThresholdKeyPageOperation(KeyOperation operation) {
+    List<int> forConcat = [];
+
+    forConcat.addAll(uvarintMarshalBinary(operation.type!, 1));
+    forConcat.addAll(uvarintMarshalBinary(operation.threshold!, 2));
 
     return forConcat.asUint8List();
   }
